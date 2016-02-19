@@ -3,6 +3,7 @@ GEM
   specs:
     dream_cheeky (0.3.1)
       pkg-config
+    mqtt (0.3.1)
     pkg-config (1.1.6)
 
 PLATFORMS
@@ -10,3 +11,7 @@ PLATFORMS
 
 DEPENDENCIES
   dream_cheeky
+  mqtt
+
+BUNDLED WITH
+   1.10.6
