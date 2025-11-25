@@ -1,0 +1,65 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'bundler/setup'
+require 'logger'
+require 'optparse'
+require_relative '../lib/brb/button'
+
+options = {
+  push_text: 'DPR ALARM! Call Jee Pee Jay!',
+  open_text: 'Do not press it!',
+  close_text: 'phew!',
+  voice: 'Fiona',
+  verbose: false
+}
+
+OptionParser.new do |opts|
+  opts.banner = 'Usage: brb [options]'
+
+  opts.on('--push-text TEXT', 'Text to speak when the button is pushed') do |text|
+    options[:push_text] = text
+  end
+
+  opts.on('--open-text TEXT', 'Text to speak when the button cover is opened') do |text|
+    options[:open_text] = text
+  end
+
+  opts.on('--close-text TEXT', 'Text to speak when the button cover is closed') do |text|
+    options[:close_text] = text
+  end
+
+  opts.on('--voice NAME', 'Voice to use with the system say command') do |name|
+    options[:voice] = name
+  end
+
+  opts.on('-v', '--verbose', 'Enable verbose logging') do
+    options[:verbose] = true
+  end
+
+  opts.on('-h', '--help', 'Show this help message') do
+    puts opts
+    exit
+  end
+end.parse!
+
+logger = options[:verbose] ? Logger.new($stderr) : nil
+
+button = Brb::Button.new(logger: logger)
+
+button.on_push do
+  puts 'alarm'
+  system('say', '-v', options[:voice], options[:push_text])
+end
+
+button.on_open do
+  puts 'open'
+  system('say', '-v', options[:voice], options[:open_text])
+end
+
+button.on_close do
+  puts 'phew'
+  system('say', '-v', options[:voice], options[:close_text])
+end
+
+button.run

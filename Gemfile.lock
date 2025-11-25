@@ -1,17 +1,35 @@
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
+    diff-lcs (1.6.2)
     dream_cheeky (0.3.1)
       pkg-config
-    mqtt (0.3.1)
-    pkg-config (1.1.6)
+    logger (1.7.0)
+    mqtt (0.7.0)
+      logger
+    pkg-config (1.6.4)
+    rspec (3.13.2)
+      rspec-core (~> 3.13.0)
+      rspec-expectations (~> 3.13.0)
+      rspec-mocks (~> 3.13.0)
+    rspec-core (3.13.6)
+      rspec-support (~> 3.13.0)
+    rspec-expectations (3.13.5)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-mocks (3.13.7)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.13.0)
+    rspec-support (3.13.6)
 
 PLATFORMS
   ruby
+  x86_64-linux
 
 DEPENDENCIES
   dream_cheeky
   mqtt
+  rspec
 
 BUNDLED WITH
-   1.10.6
+   2.7.2

@@ -1,0 +1,57 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'bundler/setup'
+require 'logger'
+require 'optparse'
+require 'mqtt'
+require_relative '../lib/brb/button'
+
+options = {
+  broker: 'mqtt://localhost',
+  topic: 'button',
+  verbose: false
+}
+
+OptionParser.new do |opts|
+  opts.banner = 'Usage: brb-mqtt [options]'
+
+  opts.on('-b', '--broker URL', 'MQTT broker URL (e.g., mqtt://localhost)') do |url|
+    options[:broker] = url
+  end
+
+  opts.on('-t', '--topic TOPIC', 'MQTT topic to publish button events to') do |topic|
+    options[:topic] = topic
+  end
+
+  opts.on('-v', '--verbose', 'Enable verbose logging') do
+    options[:verbose] = true
+  end
+
+  opts.on('-h', '--help', 'Show this help message') do
+    puts opts
+    exit
+  end
+end.parse!
+
+logger = options[:verbose] ? Logger.new($stderr) : nil
+client = MQTT::Client.connect(options[:broker])
+
+button = Brb::Button.new(logger: logger)
+
+button.on_push do
+  puts 'pressed'
+  client.publish(options[:topic], 'pressed', false)
+end
+
+button.on_open do
+  puts 'opened'
+  client.publish(options[:topic], 'opened', false)
+end
+
+button.on_close do
+  puts 'closed'
+  client.publish(options[:topic], 'closed', false)
+end
+
+button.run
